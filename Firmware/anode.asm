@@ -12,6 +12,7 @@
 ;
 ;Change log
 ;
+;V1.10 2014.05.12 - Implemented more aggressive filter cutoff using hybrid analog/digital algorithm.
 ;V1.03 2014.03.13 - Changed MIDI Set knobs to the bottom row. Width = Channel 1 .. Depth - Channel 4. 
 ;V1.02 2014.02.27 - Add Filter envelope modulation as MIDI CC parameter, LFO now continues during decay/release
 ;V1.01 2014.02.25 - Implement MIDI Channel set, MIDI CC parameter control
