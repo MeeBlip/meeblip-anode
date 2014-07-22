@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------------------------------------------
-; Meeblip anode		Version 1.10
+; Meeblip anode		Version 1.00
 ;
 ;
 ;-------------------------------------------------------------------------------------------------------------------
@@ -139,6 +139,10 @@ MLP_SWITCH_EXIT:
 MLP_SKIPSCAN:
 
 ; Check MIDI Set switch
+			lds		r16, BUTTON_STATUS
+			cpi		r16, 3						; If button has been pressed, allow LED to flash
+			breq	control_exit
+
 			lds		r21, PATCH_SWITCH2
 			sbrc	r21, SW_MIDI				; 0(pressed)/1(not pressed)
 			rjmp	CONTROL_EXIT				; button not pressed

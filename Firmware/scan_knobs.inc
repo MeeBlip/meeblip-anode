@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------------------------------------------
-; Meeblip anode		Version 1.10
+; Meeblip anode		Version 1.00
 ;
 ;
 ;-------------------------------------------------------------------------------------------------------------------
@@ -98,8 +98,14 @@ CHECK_3:
 			brne	CHECK_4	
 			rcall	POT_SCAN			; If so, check if parameter should be updated with pot value in r16
 			tst		r17					
-			breq	EXIT_CHECK3		; Skip update if pot hasn't been updated
+			breq	EXIT_CHECK3			; Skip update if pot hasn't been updated
 			sts     PULSE_KNOB, r16
+			lsr		r16					; 0..127
+			lsr		r16					; 0..63
+			lsr		r16					; 0..31
+			lsr		r16					; 0..15
+			lsr		r16					; 0..8
+			sts		WAVETABLE, r16		; Knob value selects one of 8 wavetables  
 
 			; Check if MIDI set switch has been pressed. If so, set MIDI CHANNEL
 			lds		r16, BUTTON_STATUS

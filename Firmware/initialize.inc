@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------------------------------------------
-; Meeblip anode		Version 1.10
+; Meeblip anode		Version 1.00
 ;
 ;-------------------------------------------------------------------------------------------------------------------
 ; Initialization
@@ -38,6 +38,7 @@ RESET:
 			sts 	KNOB_DEADZONE, r16	
 		    ldi	    r16, 0
 			sts		BUTTON_STATUS, r16	; no buttons pressed
+			sts		FIRMWARE, r16		; Run standard firmware
 			sts		PATCH_SWITCH1, r16	; Default patch is null until loaded from front panel or memory
 			sts		SETMIDICHANNEL, r16 ; Default MIDI channel to zero (omni)
 			sts		FMDEPTH, r16		; FM Depth = 0
@@ -224,3 +225,22 @@ LOAD_MIDI_CHANNEL:
 		    in		r17, TCNT1H		        ;/ r17:r16 = TCNT1 = t
 		    sts		TPREV_KBD_L, r16
 		    sts		TPREV_KBD_H, r17
+
+; Alternate firmware check
+; Check if MIDI SET button is pressed on back panel at power up. If so, run alternate firmware.
+			in		r16, PINC	; Read PORTC pin values (front panel switches)	
+			sbrc	r16, 0				
+			rjmp	STANDARD_FIRMWARE	; skip if MIDI Set button = 1 (not pressed)
+			
+			ldi		r16, 1
+			sts		FIRMWARE, r16 		; Flag alternate FIRMWARE (set to 1)
+			
+			; blink LED double fast if alternate firmware has been selected. 
+			ldi		r16, 3
+			sts		BUTTON_STATUS, r16	; Save flash status, turn on LED flash timer 
+			ldi		r16, 255
+			sts		LED_TIMER, r16
+			ldi		r16, 48
+			sts		LED_TIMER2, r16
+			
+STANDARD_FIRMWARE:						; Do nothing, run standard firmware options.

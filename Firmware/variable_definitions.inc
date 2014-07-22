@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------------------------------------------
-; Meeblip anode		Version 1.10
+; Meeblip anode		Version 1.00
 ;
 ;
 ;-------------------------------------------------------------------------------------------------------------------
@@ -183,6 +183,8 @@ DELTAB_2: .byte 1
 ; Wavetable select
 WAVETABLE_A:		.byte 1		; Bandlimited wavetable 0..11
 WAVETABLE_B:		.byte 1		; Bandlimited wavetable 0..11
+WAVETABLE:			.byte 1		; User wavetable 0.32
+
 
 ; oscillator pulse width
 PULSE_WIDTH:		.byte 1
@@ -215,3 +217,4 @@ LPF_H:		.byte 1				; Filter cutoff packed in 2 bytes for DAC
 LED_TIMER:		.byte 1				; number of blinks before reset
 LED_TIMER2:		.byte 1
 BUTTON_STATUS:	.byte 1				; MIDI=1
+FIRMWARE:		.byte 1				; 0 = standard firmware, 1 = alternate

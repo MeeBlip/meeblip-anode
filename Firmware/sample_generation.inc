@@ -71,6 +71,11 @@ TIM0_CMP:
 			out		SPDR, r30	
 				
 
+; Pulse wave or wavetable version?
+			lds		r21, FIRMWARE
+			sbrc	r21, 0	
+			jmp		WAVE_DCOA		; If FIRMWARE = 1, execute alternate firmware (wavetables)
+
 ;Calculate DCO A							
 
 CALC_DCOA:
@@ -101,7 +106,7 @@ DCOA_SAW:
 			ldi		ZL, low (2*INV_SAW0)		; Load low part of byte address into ZL
 			ldi		ZH, high(2*INV_SAW0)		; Load high part of byte address into ZH
 			add		ZL, r17						; Offset the wavetable by the ramp phase (i)
-			adc		ZH, r22						; Wavetable 0..15
+			adc		ZH, r22						; Wavetable 0..11
 			lpm									;	Load wave(i) into r0
 			mov		r17, r0						;	Copy into DCO A
 RAW_SAWA:
@@ -121,7 +126,7 @@ PULSEA:
 			ldi		ZL, low (2*INV_SAW0)		; Load low part of byte address into ZL
 			ldi		ZH, high(2*INV_SAW0)		; Load high part of byte address into ZH
 			add		ZL, r17						; Offset the wavetable by the ramp phase (i)
-			adc		ZH, r22						; Wavetable 0..15
+			adc		ZH, r22						; Wavetable 0..11
 			lpm									; Load wave(i) into r0
 
 	; get sample b out of phase into r18
@@ -187,7 +192,7 @@ DCOB_SAW:
 			ldi		ZL, low (2*INV_SAW0)		; Load low part of byte address into ZL
 			ldi		ZH, high(2*INV_SAW0)		; Load high part of byte address into ZH
 			add		ZL, r16						; Offset the wavetable by the ramp phase (i)
-			adc		ZH, r22						; Wavetable 0..15
+			adc		ZH, r22						; Wavetable 0..11
 			lpm									;	Load wave(i) into r0
 			mov		r16, r0						;	Copy into DCO B
 
@@ -269,6 +274,98 @@ EXIT_PULSEB:
 			adc		r31, r1				; sum scaled waves
 			movw	r16, r30			; copy signed output into r16
 
+			jmp		PRE_DCF
+
+;-------------------------------------------------------------------------------------------------------------------
+; Wavetable Oscillators
+;
+WAVE_DCOA:
+		    mov	    r16, PHASEA_2				; sawtooth ramp for OSCA
+
+			lds		r22, WAVETABLE				; Wavetable 0..15
+			ldi		r17, 8						; Number of tables in a bank
+
+			lds		r21, PATCH_SWITCH1
+			sbrc	r21, SW_PWM_SWEEP  ; 0/1 (pulse/PWM)	
+			add		r22, r17					; Increment wavetable to second bank (waves 8-15)
+
+			add		r22, r22					; Multiply WAVETABLE by 2 because each table is 512 bytes (256 x 16-bit samples)
+
+			clr		r17							; zero r17
+			add		r16, r16					; Multiply ramp by 2 (512 byte table) and store in r17:r16
+			adc		r17, ZERO					; carry
+																
+
+DCOA_WAVES:
+												
+			ldi		ZL, low (2*WAVES)		; Load low part of byte address into ZL
+			ldi		ZH, high(2*WAVES)		; Load high part of byte address into ZH
+			add		ZL, r16					; Offset the wavetable by the ramp phase (i)
+			adc		ZH, r17
+
+			add		ZH, r22					; Offset wavetable 0..15 x 2 (each sample is 2 bytes)
+
+			lpm		r18, Z+						; Copy half of the sample into sample high byte and increment pointer 
+			lpm		r19, Z						; Copy other half of sample into sample low byte 
+
+									
+;Calculate DCO B							
+
+WAVE_DCOB:
+		    mov	    r16, PHASEB_2				; sawtooth ramp for OSCA
+
+			clr		r17							; zero r17
+			add		r16, r16					; Multiply ramp by 2 (512 byte table) and store in r17:r16
+			adc		r17, ZERO					; carry
+
+
+DCOB_WAVES:
+												
+			ldi		ZL, low (2*WAVES)		; Load low part of byte address into ZL
+			ldi		ZH, high(2*WAVES)		; Load high part of byte address into ZH
+			add		ZL, r16						; Offset the wavetable by the ramp phase (i)
+			adc		ZH, r17
+
+			add		ZH, r22					; Offset wavetable 0..15 x 2 (each sample is 2 bytes)
+
+			lpm		r16, Z+						; Copy half of the sample into sample high byte and increment pointer 
+			lpm		r17, Z						; Copy other half of sample into sample low byte 
+
+
+			NOP NOP NOP NOP
+			NOP NOP NOP NOP
+
+			; Output second byte of DCA Level on SPI
+			lds		r30, LEVEL_L
+			out		SPDR, r30
+
+
+
+			; Shift both oscillators one bit right to make sure we don't overflow the sum.
+			asr	    r17		            ;\
+			ror	    r16		            ;/ r17:r16 = r17:r16 asr 1
+
+			asr	    r19		            ;\
+		    ror	    r18		            ;/ r19:r18 = r19:r18 asr 1
+
+			add		r16, r18
+			adc		r17, r19			; Sum the oscillators
+
+
+; Finish loading cutoff or envelope level, pull CS high. 
+
+			; Make sure SPI has enough time to complete.
+			NOP	NOP	NOP	NOP
+			NOP	NOP	NOP	NOP
+			NOP	NOP	NOP	NOP
+			NOP	NOP	NOP	NOP
+					
+			NOP	NOP	NOP	NOP
+			NOP	NOP	NOP	NOP
+			NOP	NOP	NOP	NOP
+			NOP	NOP	NOP	NOP
+
+PRE_DCF:
 ; Finish loading cutoff or envelope level, pull CS high. 
 			sbi		PORTD, 3	; CS (DAC)
 
