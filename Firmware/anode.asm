@@ -12,7 +12,8 @@
 ;
 ;Change log
 ;
-;V2.00 2014.07.22 - Added Wavetable mode (hold MIDI SET button for a moment at power up and the Pulse width knob selects
+;V2.01 2014.10.29 - Added LFO Random waveform, Optional LFO Note Retriggering and Oscillator B wave select (pulse/sawtooth) as MIDI CC parameters.
+;V2.00 2014.07.22 - Added Wavetable mode (hold MIDI SET button for a moment at power up and the Pulse width knob selects.
 ;					from 8 waveforms, the Pulse Sweep switch selects between Waveform Bank A and Bank B).
 ;V1.10 2014.05.12 - Implemented more aggressive filter cutoff using hybrid analog/digital algorithm. 
 ;V1.03 2014.03.13 - Changed MIDI Set knobs to the bottom row. Width = Channel 1 .. Depth - Channel 4. 

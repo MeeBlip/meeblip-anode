@@ -175,6 +175,10 @@ EXIT_PULSEA:
 CALC_DCOB:
 		    mov	    r16, PHASEB_2				; sawtooth ramp for OSCA
 
+			lds	    r23, PATCH_SWITCH1
+		    sbrc 	r23, SW_OSCB_WAVE			; SW_OSCB_WAVE: 1 = sawtooth, 0 = pulse 	
+		    rjmp	SAW_OSCB
+
 PULSE_OSCB:
 
 			lds		r23, PULSE_KNOB_LIMITED		; get range limited pulse width from knob

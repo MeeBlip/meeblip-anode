@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------------------------------------------
-; Meeblip anode		Version 1.10
+; Meeblip anode		Version 1.00
 ;
 ;
 ;-------------------------------------------------------------------------------------------------------------------
@@ -97,10 +97,9 @@ MLP_LFOX:
 		    ldi	    r17, 0			    ; > Amin when not LFO==tri
     		ldi	    r18, 0			    ;/  and not LFO==rand
 		    
-			/* Disable LFO random 
+			; LFO random 
 			lds	    r30, PATCH_SWITCH1
 			sbrs 	r30, SW_LFO_RANDOM	; LFO random if switch is set
-			*/
 
     		RJMP	MLP_LFOAWR
 		    tst	    r31
@@ -124,14 +123,14 @@ MLP_LFOAWR:
 
 MLP_LFOAX:
 ; Default to normal lfo behaviour (comment out to disable LFO random)
-/*		    lds	    r16, PATCH_SWITCH1
+		    lds	    r16, PATCH_SWITCH1
 		    sbrs 	r16, SW_LFO_RANDOM
 		    rjmp	MLP_LFONORM
 		    tst	    r31			        ; flag == 1 ?
 		    breq	MLP_LFONWR		    ; jump when not
 		    lds	    r21, SHIFTREG_2
 		    rjmp	MLP_LFOWR
-*/
+
 
 MLP_LFONORM:
 

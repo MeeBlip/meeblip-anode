@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------------------------------------------
-; Meeblip anode		Version 1.10
+; Meeblip anode		Version 1.00
 ;
 ;
 ;-------------------------------------------------------------------------------------------------------------------
@@ -55,9 +55,14 @@ MLP_KEYON1:
 		    ;sts	    ENV_INTEGR, R16		;/
  
 
-; LFO starts when note triggered:
-; Don't restart LFO when note triggered
-/*		    ldi	    r16, 255		    ;\
+; LFO starts when note triggered if SW_LFO_RETRIGGER = 0 (defaults to ON)
+
+
+		    lds	    r16, PATCH_SWITCH1
+		    sbrc 	r16, SW_LFO_RETRIGGER	
+		    rjmp	MLP_NOTEON
+
+		    ldi	    r16, 255		    ;\
 		    ldi	    r17, 255		    ; > A = Amax
 		    ldi	    r18, 127		    ;/
 		    sts	    LFO_FRAC_L, r16		;\
@@ -65,7 +70,7 @@ MLP_KEYON1:
 		    sts	    LFO_INTEGR, r18		;/
 		    ldi	    r16, 1			    ;\
 		    sts	    LFOPHASE, r16		;/ begin falling
-*/
+
 
 MLP_NOTEON:
             ;-------------

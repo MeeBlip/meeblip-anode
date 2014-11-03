@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------------------------------------------
-; Meeblip anode		Version 1.10
+; Meeblip anode		Version 1.00
 ;
 ;
 ;-------------------------------------------------------------------------------------------------------------------
@@ -30,9 +30,9 @@ MIDICC:         		.byte $80 		; 128 bytes reserved in RAM for table
   .equ S_OSCB_OCT		= MIDICC + $41
   .equ S_PWM_SWEEP		= MIDICC + $42
   .equ S_LFO_DEST		= MIDICC + $43
-  .equ S_LFO_WAVE		= MIDICC + $44 
-  .equ S_LFO_RANDOM		= MIDICC + $45 
-  .equ S_UNASSIGNED_1	= MIDICC + $46
+  .equ S_LFO_RANDOM		= MIDICC + $44 
+  .equ S_LFO_RETRIGGER	= MIDICC + $45 
+  .equ S_OSCB_WAVE		= MIDICC + $46
   .equ S_UNASSIGNED_2	= MIDICC + $47
 
 

@@ -86,6 +86,7 @@ MLP_SWITCH:
 			bst		r16, 0
 			bld		r18, 0				; copy bit from SWITCH1 to PATCH_SWITCH1
 MLP_BIT1:
+
 			sbrs	r17, 1				
 			rjmp	MLP_BIT2	
 			bst		r16, 1
@@ -102,7 +103,7 @@ MLP_BIT3:
 			rjmp	MLP_BIT4			
 			bst		r16, 3
 			bld		r18, 3
-			
+		
 MLP_BIT4:
 			sbrs	r17, 4				
 			rjmp	MLP_BIT5			
@@ -119,7 +120,7 @@ MLP_BIT6:
 			sbrs	r17, 6				
 			rjmp	MLP_BIT7			
 			bst		r16, 6
-			bld		r18, 6				
+			bld		r18, 6					
 
 MLP_BIT7:
 			sbrs	r17, 7				

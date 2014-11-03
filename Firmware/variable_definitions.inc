@@ -76,10 +76,13 @@ PATCH_SWITCH1:		.BYTE 1
   .equ SW_OSCB_OCT		= 1
   .equ SW_PWM_SWEEP		= 2
   .equ SW_LFO_DEST		= 3
-  .equ SW_LFO_WAVE		= 4
-  .equ SW_LFO_RANDOM	= 5
-  .equ SW_UNASSIGNED_1	= 6
+  .equ SW_LFO_RANDOM	= 4
+  .equ SW_LFO_RETRIGGER	= 5
+  .equ SW_OSCB_WAVE		= 6
   .equ SW_UNASSIGNED_2	= 7
+
+
+
 
 PATCH_SWITCH2:		.BYTE 1
   .equ SW_MIDI			= 0

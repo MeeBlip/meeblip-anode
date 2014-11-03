@@ -40,6 +40,7 @@ RESET:
 			sts		BUTTON_STATUS, r16	; no buttons pressed
 			sts		FIRMWARE, r16		; Run standard firmware
 			sts		PATCH_SWITCH1, r16	; Default patch is null until loaded from front panel or memory
+			sts		SWITCH1, r16
 			sts		SETMIDICHANNEL, r16 ; Default MIDI channel to zero (omni)
 			sts		FMDEPTH, r16		; FM Depth = 0
 		    sts	    GATE, r16		    ; GATE = 0
