@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------------------------------------------
-; Meeblip anode		Version 1.10
+; Meeblip anode		Version 1.00
 ;
 ;
 ;-------------------------------------------------------------------------------------------------------------------
@@ -11,26 +11,15 @@
 
 UART_RXC:
 
-            push	r16
-		    in	    r16, SREG	        ;\
-		    push	r16			        ;/ push SREG
-			push	r17 
+			push	r16
+			in		r16, SREG			; \
+			push	r16					; / push SREG
 
-		    in	    r16, UDR	        ; read received byte in r16
-		    cbi	    UCR, 7		        ; RXCIE=0 (disable UART interrupts)
+			in		r16, UDR			; read received byte in r16
+			cbi		UCSRB, RXCIE		; RXCIE=0 (disable UART interrupts)
+			sei							; enable other interrupts
+			push	r17
 
-
-; Exit UART interrupt immediately if received MIDI value => $F0
-			cpi		r16, $F0			; ignore active sensing, midi clocks, sysex
-			brlo	INTRX_PROCESS
-			ldi		r16, 0
-			sts	    MIDIPHASE, r16		; MIDIPHASE = 0
-			;sei				            ; enable other interrupts
-			rjmp	INTRX_EXIT			; quit UART loop as quickly as possible
-
-INTRX_PROCESS:
-; end
-			;sei				            ; enable other interrupts
 		    tst	    r16		            ;\ jump when
 		    brpl	INTRX_DATA		    ;/ r16.7 == 0 (MIDI data byte)
 
@@ -315,9 +304,9 @@ INTRX_PB2:
 		    rjmp	INTRX_EXIT
 
 INTRX_EXIT:
-            pop	    r17
-		    pop	    r16			        ;\
-		    out	    SREG, r16		    ;/ pop SREG
-		    pop	    r16
-		    sbi	    UCR, 7			    ; RXCIE=1
-		    reti
+			pop	r17
+			pop	r16						; \
+			out	SREG, r16				; / pop SREG
+			pop	r16
+			sbi	UCSRB, RXCIE			; RXCIE=1
+			reti

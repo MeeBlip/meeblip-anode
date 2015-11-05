@@ -1,17 +1,18 @@
 
 ;-------------------------------------------------------------------------------------------------------------------
-;                    _     _  _                                _       
-;                   | |   | |(_)                              | |      
-;  ____  _____ _____| |__ | | _ ____     _____ ____   ___   __| |_____ 
-; |    \| ___ | ___ |  _ \| || |  _ \   (____ |  _ \ / _ \ / _  | ___ |
-; | | | | ____| ____| |_) ) || | |_| |  / ___ | | | | |_| ( (_| | ____|
-; |_|_|_|_____)_____)____/ \_)_|  __/   \_____|_| |_|\___/ \____|_____)
-;                              |_|                                     
-; 
+;                      _     _ _                               _                         
+;   _ __ ___   ___  ___| |__ | (_)_ __     __ _ _ __   ___   __| | ___    ___  _ __   ___ 
+;  | '_ ` _ \ / _ \/ _ \ '_ \| | | '_ \   / _` | '_ \ / _ \ / _` |/ _ \  / _ \| '_ \ / _ \
+;  | | | | | |  __/  __/ |_) | | | |_) | | (_| | | | | (_) | (_| |  __/ | (_) | | | |  __/
+;  |_| |_| |_|\___|\___|_.__/|_|_| .__/   \__,_|_| |_|\___/ \__,_|\___|  \___/|_| |_|\___|
+;                                |_|                                                      
 ;-------------------------------------------------------------------------------------------------------------------
 ;
 ;Change log
 ;
+;V2.03 2015.08.11 - Added dead zone at centre of detune knob,
+;				  - Set minimum d-resonance to 1. 
+;V2.02 2015.05.25 - Adjusted digital pre-filtering lookup table so that it starts at a cutoff of zero.
 ;V2.01 2014.10.29 - Added LFO Random waveform, Optional LFO Note Retriggering and Oscillator B wave select (pulse/sawtooth) as MIDI CC parameters.
 ;V2.00 2014.07.22 - Added Wavetable mode (hold MIDI SET button for a moment at power up and the Pulse width knob selects.
 ;					from 8 waveforms, the Pulse Sweep switch selects between Waveform Bank A and Bank B).
@@ -22,6 +23,27 @@
 ;V1.00 2014.01.14 - Initial release
 ;
 ;-------------------------------------------------------------------------------------------------------------------
+;
+;   MeeBlip hardware is released under a Creative Commons Attribution-ShareAlike 4.0 International (CC-BY-SA 4.0) license.
+; 	You are free to share and transform this work, even for commercial purposes, providing you:
+;
+;	1. Attribute - Give appropriate credit, provide a link to the license, and indicate if changes were made. You can say something 
+; 	   such as "This project is based upon the MeeBlip anode synthesizer. For more information, visit meeblip.com
+;	   or download source code and design files at https://github.com/MeeBlip"
+;
+;	2. Share Alike - If you remix, transform, or build upon the material, you must distribute your contributions under the same license 
+;	   as the original. That means making source code, design files and PC board layout files available so someone can 
+;	   build and modify their own version of the project. 
+; 	
+; 	Here's are links to the Creative Commons license, for the design:
+; 	http://creativecommons.org/licenses/by-sa/4.0/
+;	http://creativecommons.org/licenses/by-sa/4.0/legalcode
+;
+;	MeeBlip source code and documentation is released under a GPLv3 license. 
+;
+;   A copy is available in the MeeBlip repository at:
+;	https://github.com/MeeBlip/meeblip-anode/blob/master/LICENSE
+; 
 ;
 ;	MeeBlip Contributors
 ;

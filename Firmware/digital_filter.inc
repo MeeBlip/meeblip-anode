@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------------------------------------------
-; Meeblip anode		Version 1.10
+; Meeblip anode		Version 1.00
 ;
 ;
 ;-------------------------------------------------------------------------------------------------------------------
@@ -45,7 +45,7 @@ OVERFLOW_1:				;when overflow is clear
 
 	sub	r22, r21		; Q-(1-f)
 	brcc	OVERFLOW_2		; if no overflow occured
-	ldi	r22, 0x00		;0x00 because of unsigned
+	ldi	r22, 0x01		;0x01 because of unsigned
 
 OVERFLOW_2:
 

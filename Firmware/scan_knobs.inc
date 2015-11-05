@@ -86,11 +86,22 @@ CHECK_2:
 
 EXIT_CHECK2:
 			lds		r16, OSC_DETUNE		; grab the patch value, just in case it hasn't been updated
+			cpi		r16, 129			; lock oscillator frequencies if knob is centred (knob value of 127). 
+			brlo	EXIT_CHECK2A
+CONTINUE_CHECK2:
 		    rcall	NONLINPOT		    ; AD6.1 --> DCO B detune with non-linear knob (center is tuned)
 		    subi	r17, 128		     
 		    sts	    DETUNEB_FRAC, r16	; Value -128.000..+127.996
 		    sts	    DETUNEB_INTG, r17	
 EXIT_POTS:
+			rjmp	END_POTS
+EXIT_CHECK2A:
+			cpi		r16, 125
+			brlo	CONTINUE_CHECK2		; If knob value is 125 - 128, set detune to zero and lock oscillators 
+			ldi		r16, 0
+			ldi		r17, 0
+		    sts	    DETUNEB_FRAC, r16	; Detune 0
+		    sts	    DETUNEB_INTG, r17	
 			rjmp	END_POTS
 
 CHECK_3:
@@ -100,12 +111,6 @@ CHECK_3:
 			tst		r17					
 			breq	EXIT_CHECK3			; Skip update if pot hasn't been updated
 			sts     PULSE_KNOB, r16
-			lsr		r16					; 0..127
-			lsr		r16					; 0..63
-			lsr		r16					; 0..31
-			lsr		r16					; 0..15
-			lsr		r16					; 0..8
-			sts		WAVETABLE, r16		; Knob value selects one of 8 wavetables  
 
 			; Check if MIDI set switch has been pressed. If so, set MIDI CHANNEL
 			lds		r16, BUTTON_STATUS
@@ -120,6 +125,14 @@ EXIT_CHECK3:
 			lds		r16, PULSE_KNOB		; grab the patch value, just in case it hasn't been updated
 			lsr		r16					; Divide it by two (we only need 0-50% pulse)
 										; Limit to 10-127
+
+			mov		r17,r16				; Copy the pulse knob value to select wavetable if in wavetable mode 
+			lsr		r17					; 0..63
+			lsr		r17					; 0..31
+			lsr		r17					; 0..15
+			lsr		r17					; 0..8
+			sts		WAVETABLE, r17		; Knob value selects one of 8 wavetables
+
 			cpi		r16, 10
 			brlo	CHECK_3LIMIT
 			rjmp	CHECK_3A
